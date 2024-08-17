@@ -15,6 +15,7 @@ func Test_Telegram(t *testing.T) {
 	s := NewTelegram(base)
 	s.viper.Set("token", "123213:this-is-my-token")
 	s.viper.Set("chat_id", "@gobackuptest")
+	s.viper.Set("disable_notification", true)
 
 	assert.Equal(t, "Telegram", s.Service)
 	assert.Equal(t, "POST", s.method)
@@ -22,7 +23,7 @@ func Test_Telegram(t *testing.T) {
 
 	body, err := s.buildBody("This is title", "This is body")
 	assert.NoError(t, err)
-	assert.Equal(t, `{"chat_id":"@gobackuptest","text":"This is title\n\nThis is body"}`, string(body))
+	assert.Equal(t, `{"chat_id":"@gobackuptest","text":"This is title\n\nThis is body","disable_notification":true}`, string(body))
 
 	url, err := s.buildWebhookURL("")
 	assert.NoError(t, err)
