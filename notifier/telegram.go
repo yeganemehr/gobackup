@@ -6,8 +6,9 @@ import (
 )
 
 type telegramPayload struct {
-	ChatID string `json:"chat_id"`
-	Text   string `json:"text"`
+	ChatID              string `json:"chat_id"`
+	Text                string `json:"text"`
+	DisableNotification bool   `json:"disable_notification"`
 }
 
 func NewTelegram(base *Base) *Webhook {
@@ -23,10 +24,12 @@ func NewTelegram(base *Base) *Webhook {
 		},
 		buildBody: func(title, message string) ([]byte, error) {
 			chat_id := base.viper.GetString("chat_id")
+			disable_notification := base.viper.GetBool("disable_notification")
 
 			payload := telegramPayload{
-				ChatID: chat_id,
-				Text:   fmt.Sprintf("%s\n\n%s", title, message),
+				ChatID:              chat_id,
+				Text:                fmt.Sprintf("%s\n\n%s", title, message),
+				DisableNotification: disable_notification,
 			}
 
 			return json.Marshal(payload)
